@@ -1,0 +1,34 @@
+#!/bin/bash
+#chkconfig: mysql_server
+#description: mysql start/stop/restart
+
+MYSQLD_CMD="mysqld_safe"
+MYSQL_ADMIN="mysqladmin"
+MYSQL_CONF="my.cnf"
+MYSQL_SOCK="mysql.sock"
+MYSQL_PWD=""
+
+start() {
+${MYSQLD_CMD}  --defaults-file=${MYSQL_CONF} &
+}
+
+stop() {
+${MYSQL_ADMIN} -uroot -p${MYSQL_PWD} -S ${MYSQL_SOCK} shutdown
+}
+
+restart() {
+${MYSQL_ADMIN} -uroot -p${MYSQL_PWD} -S ${MYSQL_SOCK} shutdown
+${MYSQLD_CMD}  --defaults-file=${MYSQL_CONF} &
+}
+
+case "$1" in
+  start)
+        $1;;
+  stop)
+        $1;;
+  restart)
+        $1;;
+  *)
+ echo $"Usage: $0 {start|stop|restart}"
+ exit 1
+esac
